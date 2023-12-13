@@ -21,6 +21,8 @@ _A plugin to run go-cqhttp directly in NoneBot2, without additional download and
 
 愿我们能在更加开放的平行世界再次相遇。
 
+旧时代已经过去咯，新时代且行且看吧
+
 ## 优势
 
 ~~对标[`koishijs/koishi-plugin-gocqhttp`](https://github.com/koishijs/koishi-plugin-gocqhttp/)~~
