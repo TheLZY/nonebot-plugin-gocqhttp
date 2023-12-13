@@ -10,23 +10,19 @@ jobs:
     name: Build frontend
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: frontend
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v3.6.0
+        uses: actions/setup-node@v3.8.1
         with:
-          node-version: 16.x
+          node-version: lts/*
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v3.3.2
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -34,14 +30,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Run a multi-line script
+      - name: Install dependencies
         run: |
           yarn global add @quasar/cli
           yarn install
 
       - name: Build dist files
         run: |
-          quasar build
+          yarn build
 
       - name: Upload dist
         uses: actions/upload-artifact@v3
@@ -54,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -63,7 +59,7 @@ jobs:
 
       - uses: Gr1N/setup-poetry@v8
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v3.3.2
         with:
           path: ~/.cache/pypoetry
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
@@ -74,6 +70,8 @@ jobs:
           poetry install -vvv
 
       - uses: suo/flake8-github-action@v1
+        with:
+          checkName: ${{ github.workflow }}
 
       - uses: jakebailey/pyright-action@v1
         with:
